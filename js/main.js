@@ -9,7 +9,7 @@ const messages = [`Всё отлично!`,
   `Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.`,
   `Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!`
 ];
-let temp = 'temp';
+
 const getAvatar = () => `img/avatar-${getRandom(0, 6)}.svg`;
 const getName = () => userNames[getRandom(0, userNames.length - 1)];
 const getComments = (imgIndx) => {

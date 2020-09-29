@@ -57,7 +57,7 @@ const getProfileInf = (profileParam) => {
 
 };
 
-const getRender = () => {
+const render = () => {
 
   let fragment = document.createDocumentFragment();
 
@@ -68,4 +68,4 @@ const getRender = () => {
   usersImg.appendChild(fragment);
 };
 
-getRender();
+render();

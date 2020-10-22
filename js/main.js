@@ -1,5 +1,8 @@
 'use strict';
 
+const MAX_PERCENT = 100;
+const INITIAL_SCALE_FACTOR = '100';
+
 const usersImg = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const uploadFile = document.querySelector('#upload-file');
@@ -9,6 +12,7 @@ const imgOverlayClose = document.querySelector('#upload-cancel');
 const scaleBtnSmaller = document.querySelector('.scale__control--smaller');
 const scaleBtnBigger = document.querySelector('.scale__control--bigger');
 const scaleIndicator = document.querySelector('.scale__control--value');
+const effectLevelPin = document.querySelector('.effect-level__pin');
 
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
@@ -78,72 +82,86 @@ render();
 
 /* задание 4.1 */
 
-uploadFile.addEventListener('change', () => {
+function doOpenModal() {
   uploadOverlay.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
+  doScale(INITIAL_SCALE_FACTOR);
+}
+
+function doCloseModal() {
+  uploadOverlay.classList.add('hidden');
+  document.querySelector('body').classList.remove('modal-open');
+  uploadFile.value = '';
+}
+
+uploadFile.addEventListener('change', () => {
+  doOpenModal();
 });
 
 imgOverlayClose.addEventListener('click', () => {
-  uploadOverlay.classList.add('hidden');
+  doCloseModal();
 });
 
-imgOverlayClose.addEventListener('keydown', (evt) => {
+window.addEventListener('keydown', (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    uploadOverlay.classList.add('hidden');
+    doCloseModal();
   }
 });
 
-function Counter() {
-  let count = 0;
-
-  this.up = () => {
-    if (count < 100) {
-      (count += 25);
-    }
-    return count;
-  };
-
-  this.down = () => {
-    if (count > 0) {
-      (count -= 25);
-    }
-    return count;
-  };
+function getCount() {
+  const text = scaleIndicator.value;
+  const prc = text.substring(0, text.length - 1);
+  const num = Number(prc);
+  return num === Number.NaN ? INITIAL_SCALE_FACTOR : num;
 }
 
-let counter = new Counter();
+function scaleUp() {
+  let count = getCount();
+  if (count < 100) {
+    (count += 25);
+  }
+  return count;
+}
 
-let func = (countBtn, indicatorNum, scale) => {
-  countBtn.addEventListener('click', () => {
-    let scaleNum = 100;
-    indicatorNum.value = `${counter.up()}%`;
-    scale.style.transform = `scale(${counter.up() / scaleNum}`;
-  });
-};
+function scaleDown() {
+  let count = getCount();
+  if (count > 25) {
+    (count -= 25);
+  }
+  return count;
+}
 
-func(scaleBtnBigger, scaleIndicator, imgPrevew);
+function doScale(value) {
+  scaleIndicator.value = `${value}%`;
+  imgPrevew.style.transform = `scale(${value / MAX_PERCENT}`;
+}
 
-let func2 = (countBtn, indicatorNum, scale) => {
-  countBtn.addEventListener('click', () => {
-    let scaleNum = 100;
-    indicatorNum.value = `${counter.down()}%`;
-    scale.style.transform = `scale(${counter.down() / scaleNum})`;
-  });
-};
 
-func2(scaleBtnSmaller, scaleIndicator, imgPrevew);
+scaleBtnBigger.addEventListener('click', () => {
+  doScale(scaleUp());
+});
+
+
+scaleBtnSmaller.addEventListener('click', () => {
+  doScale(scaleDown());
+});
+
 
 const effects = document.querySelector('.effects__list');
 // const effectsButton = document.querySelector('.effects__radio');
 const imgBigPic = document.querySelector('.img-upload__preview');
 
 let getPigPicClass = (evt) => {
-  if (!imgBigPic.classList.contains(evt.target.value)) {
-    imgBigPic.classList.add(evt.target.value);
-  } else if (imgBigPic.classList.contains(evt.target.value)) {
-    imgBigPic.classList.remove();
+  if (imgBigPic.classList.contains(evt.target.value)) {
+    imgBigPic.classList.remove(evt.target.value);
+    // } else if (imgBigPic.classList.contains(evt.target.value)) {
+    //   imgBigPic.classList.remove();
+  } else {
+    imgBigPic.classList.toggle(evt.target.value);
+    // imgBigPic.classList.add
   }
+
 };
 
 effects.addEventListener('change', getPigPicClass);

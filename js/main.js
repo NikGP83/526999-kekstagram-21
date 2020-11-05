@@ -14,6 +14,7 @@ const scaleBtnSmaller = document.querySelector('.scale__control--smaller');
 const scaleBtnBigger = document.querySelector('.scale__control--bigger');
 const scaleIndicator = document.querySelector('.scale__control--value');
 const effects = document.querySelector('.effects__list');
+const imgEffectLevel = document.querySelector('.img-upload__effect-level');
 
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
@@ -86,10 +87,11 @@ render();
 const doOpenModal = () => {
   uploadOverlay.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
-  const res = effects.querySelector('input[value = none]');
-  res.click();
+  const defaultValue = effects.querySelector('input[value = none]');
+  defaultValue.click();
   doScale(INITIAL_SCALE_FACTOR);
-}
+  imgEffectLevel.style.display = 'none';
+};
 
 const doCloseModal = () => {
   uploadOverlay.classList.add('hidden');
@@ -152,13 +154,27 @@ scaleBtnSmaller.addEventListener('click', () => {
 
 const imgBigPic = document.querySelector('.img-upload__preview');
 
-
+const filterStyle = {
+  sepia: 'sepia(1)',
+  chrome: 'grayscale(1)',
+  marvin: 'invert(100%)',
+  phobos: 'blur(3px)',
+  heat: 'brightness(3)',
+  none: 'none'
+};
 
 let setEffect = (evt) => {
   imgBigPic.classList.add(`effects__preview--${evt.target.value}`);
+  let filterValue = evt.target.value;
+  if (filterValue !== 'none') {
+    imgEffectLevel.style.display = 'block';
+  } else{
+    imgEffectLevel.style.display = 'none';
+  }
+  imgPrevew.style.filter = filterStyle[filterValue];
 };
 
-let removeEffects = (evt) => {
+let removeEffects = () => {
   const radioInputs = effects.querySelectorAll('input:checked');
   if (radioInputs.length === 1) {
     const selected = radioInputs[0];

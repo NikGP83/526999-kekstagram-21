@@ -3,6 +3,8 @@
 const MAX_PERCENT = 100;
 const INITIAL_SCALE_FACTOR = '100';
 const MAX_HASHTAGS_LENGTH = 20;
+const MAX_FOBOS = 3;
+const MAX_BRIGHTNESS = 3;
 
 const usersImg = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content.querySelector('.picture');
@@ -15,6 +17,7 @@ const scaleBtnBigger = document.querySelector('.scale__control--bigger');
 const scaleIndicator = document.querySelector('.scale__control--value');
 const effects = document.querySelector('.effects__list');
 const imgEffectLevel = document.querySelector('.img-upload__effect-level');
+const effectLevelValue = document.querySelector('.effect-level__value');
 
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
@@ -155,23 +158,25 @@ scaleBtnSmaller.addEventListener('click', () => {
 const imgBigPic = document.querySelector('.img-upload__preview');
 
 const filterStyle = {
-  sepia: 'sepia(1)',
-  chrome: 'grayscale(1)',
-  marvin: 'invert(100%)',
-  phobos: 'blur(3px)',
-  heat: 'brightness(3)',
-  none: 'none'
+  sepia: (levelOfEffects) =>`sepia(${levelOfEffects / MAX_PERCENT})`,
+  chrome: (levelOfEffects) => `grayscale(${levelOfEffects / MAX_PERCENT})`,
+  marvin: (levelOfEffects) =>`invert(${levelOfEffects}%)`,
+  phobos: (levelOfEffects) =>`blur(${levelOfEffects * MAX_FOBOS / MAX_PERCENT}px)`,
+  heat: (levelOfEffects) =>`brightness(${levelOfEffects * MAX_BRIGHTNESS / MAX_PERCENT})`,
+  none: () => 'none'
 };
 
 let setEffect = (evt) => {
   imgBigPic.classList.add(`effects__preview--${evt.target.value}`);
+  const initialEffectValue = 100;
   let filterValue = evt.target.value;
   if (filterValue !== 'none') {
     imgEffectLevel.style.display = 'block';
-  } else{
+  } else {
     imgEffectLevel.style.display = 'none';
   }
-  imgPrevew.style.filter = filterStyle[filterValue];
+  effectLevelValue.value = initialEffectValue;
+  imgPrevew.style.filter = filterStyle[filterValue](initialEffectValue);
 };
 
 let removeEffects = () => {

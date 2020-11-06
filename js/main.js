@@ -1,23 +1,23 @@
 'use strict';
 
 const MAX_PERCENT = 100;
-const INITIAL_SCALE_FACTOR = '100';
+const INITIAL_SCALE_FACTOR = `100`;
 const MAX_HASHTAGS_LENGTH = 20;
 const MAX_FOBOS = 3;
 const MAX_BRIGHTNESS = 3;
 
-const usersImg = document.querySelector('.pictures');
-const template = document.querySelector('#picture').content.querySelector('.picture');
-const uploadFile = document.querySelector('#upload-file');
-const uploadOverlay = document.querySelector('.img-upload__overlay');
-const imgPrevew = document.querySelector('.img-upload__preview');
-const imgOverlayClose = document.querySelector('#upload-cancel');
-const scaleBtnSmaller = document.querySelector('.scale__control--smaller');
-const scaleBtnBigger = document.querySelector('.scale__control--bigger');
-const scaleIndicator = document.querySelector('.scale__control--value');
-const effects = document.querySelector('.effects__list');
-const imgEffectLevel = document.querySelector('.img-upload__effect-level');
-const effectLevelValue = document.querySelector('.effect-level__value');
+const usersImg = document.querySelector(`.pictures`);
+const template = document.querySelector(`#picture`).content.querySelector(`.picture`);
+const uploadFile = document.querySelector(`#upload-file`);
+const uploadOverlay = document.querySelector(`.img-upload__overlay`);
+const imgPrevew = document.querySelector(`.img-upload__preview`);
+const imgOverlayClose = document.querySelector(`#upload-cancel`);
+const scaleBtnSmaller = document.querySelector(`.scale__control--smaller`);
+const scaleBtnBigger = document.querySelector(`.scale__control--bigger`);
+const scaleIndicator = document.querySelector(`.scale__control--value`);
+const effects = document.querySelector(`.effects__list`);
+const imgEffectLevel = document.querySelector(`.img-upload__effect-level`);
+const effectLevelValue = document.querySelector(`.effect-level__value`);
 
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
@@ -64,9 +64,9 @@ const getProfileInf = (profileParam) => {
 
   let profileElement = template.cloneNode(true);
 
-  profileElement.querySelector('.picture__img').src = profileParam.url;
-  profileElement.querySelector('.picture__comments').textContent = profileParam.comments.length;
-  profileElement.querySelector('.picture__likes').textContent = profileParam.likes;
+  profileElement.querySelector(`.picture__img`).src = profileParam.url;
+  profileElement.querySelector(`.picture__comments`).textContent = profileParam.comments.length;
+  profileElement.querySelector(`.picture__likes`).textContent = profileParam.likes;
 
   return profileElement;
 
@@ -88,30 +88,30 @@ render();
 /* задание 4.1 */
 
 const doOpenModal = () => {
-  uploadOverlay.classList.remove('hidden');
-  document.querySelector('body').classList.add('modal-open');
-  const defaultValue = effects.querySelector('input[value = none]');
+  uploadOverlay.classList.remove(`hidden`);
+  document.querySelector(`body`).classList.add(`modal-open`);
+  const defaultValue = effects.querySelector(`input[value = none]`);
   defaultValue.click();
   doScale(INITIAL_SCALE_FACTOR);
-  imgEffectLevel.style.display = 'none';
+  imgEffectLevel.style.display = `none`;
 };
 
 const doCloseModal = () => {
-  uploadOverlay.classList.add('hidden');
-  document.querySelector('body').classList.remove('modal-open');
-  uploadFile.value = '';
+  uploadOverlay.classList.add(`hidden`);
+  document.querySelector(`body`).classList.remove(`modal-open`);
+  uploadFile.value = ``;
 };
 
-uploadFile.addEventListener('change', () => {
+uploadFile.addEventListener(`change`, () => {
   doOpenModal();
 });
 
-imgOverlayClose.addEventListener('click', () => {
+imgOverlayClose.addEventListener(`click`, () => {
   doCloseModal();
 });
 
-window.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
+window.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Escape`) {
     evt.preventDefault();
     doCloseModal();
   }
@@ -146,81 +146,71 @@ const doScale = (value) => {
 }
 
 
-scaleBtnBigger.addEventListener('click', () => {
+scaleBtnBigger.addEventListener(`click`, () => {
   doScale(scaleUp());
 });
 
 
-scaleBtnSmaller.addEventListener('click', () => {
+scaleBtnSmaller.addEventListener(`click`, () => {
   doScale(scaleDown());
 });
 
-const imgBigPic = document.querySelector('.img-upload__preview');
+const imgBigPic = document.querySelector(`.img-upload__preview`);
 
 const filterStyle = {
-  sepia: (levelOfEffects) =>`sepia(${levelOfEffects / MAX_PERCENT})`,
+  sepia: (levelOfEffects) => `sepia(${levelOfEffects / MAX_PERCENT})`,
   chrome: (levelOfEffects) => `grayscale(${levelOfEffects / MAX_PERCENT})`,
-  marvin: (levelOfEffects) =>`invert(${levelOfEffects}%)`,
-  phobos: (levelOfEffects) =>`blur(${levelOfEffects * MAX_FOBOS / MAX_PERCENT}px)`,
-  heat: (levelOfEffects) =>`brightness(${levelOfEffects * MAX_BRIGHTNESS / MAX_PERCENT})`,
-  none: () => 'none'
+  marvin: (levelOfEffects) => `invert(${levelOfEffects}%)`,
+  phobos: (levelOfEffects) => `blur(${levelOfEffects * MAX_FOBOS / MAX_PERCENT}px)`,
+  heat: (levelOfEffects) => `brightness(${levelOfEffects * MAX_BRIGHTNESS / MAX_PERCENT})`,
+  none: () => `none`
 };
 
 let setEffect = (evt) => {
   imgBigPic.classList.add(`effects__preview--${evt.target.value}`);
   const initialEffectValue = 100;
   let filterValue = evt.target.value;
-  if (filterValue !== 'none') {
-    imgEffectLevel.style.display = 'block';
+  if (filterValue !== `none`) {
+    imgEffectLevel.style.display = `block`;
   } else {
-    imgEffectLevel.style.display = 'none';
+    imgEffectLevel.style.display = `none`;
   }
   effectLevelValue.value = initialEffectValue;
   imgPrevew.style.filter = filterStyle[filterValue](initialEffectValue);
 };
 
 let removeEffects = () => {
-  const radioInputs = effects.querySelectorAll('input:checked');
+  const radioInputs = effects.querySelectorAll(`input:checked`);
   if (radioInputs.length === 1) {
     const selected = radioInputs[0];
     imgBigPic.classList.remove(`effects__preview--${selected.value}`);
   }
 };
 
-effects.addEventListener('mousedown', removeEffects, true);
-effects.addEventListener('change', setEffect);
+effects.addEventListener(`mousedown`, removeEffects, true);
+effects.addEventListener(`change`, setEffect);
 
 /* Валидация */
 
-const textHashtags = document.querySelector('.text__hashtags');
-
-const reg = /#[a-z]+/;
-
-// const missingValidity = () => {
-//   if (textHashtags.validity.valueMissing) {
-//     textHashtags.setCustomValidity('Обязательное поле')
-//    } //else {
-//   //   textHashtags.setCustomValidity = '';
-//   // }
-// };
-
-// textHashtags.addEventListener('invalid', function () {
-//   missingValidity();
-// })
+const textHashtagsInput = document.querySelector(`.text__hashtags`);
 
 const getValidation = () => {
-  let value = textHashtags.value;
+  const reg = /#[a-z]+/;
+  let value = textHashtagsInput.value;
   let length = value.length;
-  console.log(length)
-  if (value === '') {
-    textHashtags.setCustomValidity('Строка не должна быть пустой');
-  } else if (length > MAX_HASHTAGS_LENGTH) {
-    textHashtags.setCustomValidity(`Удалите лишние ${length - MAX_HASHTAGS_LENGTH} символы`);
-  } else if (reg.test(value)) {
-    textHashtags.setCustomValidity('работает');
+  console.log(value)
+
+  if (length > MAX_HASHTAGS_LENGTH) {
+    textHashtagsInput.setCustomValidity(`Удалите лишние ${length - MAX_HASHTAGS_LENGTH} символов`);
+  } else if (textHashtagsInput.setCustomValidity.tooShort) {
+    textHashtagsInput.setCustomValidity(`Минимум 2 символа`);
+  } else {
+    textHashtagsInput.setCustomValidity(``);
   }
+  textHashtagsInput.reportValidity(``);
 };
 
-textHashtags.addEventListener('input', function () {
+
+textHashtagsInput.addEventListener(`input`, function () {
   getValidation();
 });

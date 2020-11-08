@@ -5,6 +5,7 @@ const INITIAL_SCALE_FACTOR = `100`;
 const MAX_HASHTAGS_LENGTH = 20;
 const MAX_FOBOS = 3;
 const MAX_BRIGHTNESS = 3;
+const MAX_DESCRIPTION_CHARS = 128;
 
 const usersImg = document.querySelector(`.pictures`);
 const template = document.querySelector(`#picture`).content.querySelector(`.picture`);
@@ -193,24 +194,42 @@ effects.addEventListener(`change`, setEffect);
 /* Валидация */
 
 const textHashtagsInput = document.querySelector(`.text__hashtags`);
+const textDescriptionInput = document.querySelector('.text__description');
 
-const getValidation = () => {
-  const reg = /#[a-z]+/;
-  let value = textHashtagsInput.value;
-  let length = value.length;
-  console.log(value)
+const getHashValidation = () => {
+  const reg = /^#[a-z\d]+$/;
+  let inputValue = textHashtagsInput.value;
+  let inputCharLength = inputValue.length;
+  const isInputValid = reg.test(inputValue);
 
-  if (length > MAX_HASHTAGS_LENGTH) {
-    textHashtagsInput.setCustomValidity(`Удалите лишние ${length - MAX_HASHTAGS_LENGTH} символов`);
-  } else if (textHashtagsInput.setCustomValidity.tooShort) {
-    textHashtagsInput.setCustomValidity(`Минимум 2 символа`);
-  } else {
+
+  if (inputCharLength === 1 && inputValue[0] !== `#`) {
+    textHashtagsInput.setCustomValidity(`Должен начинаться с #`);
+  } else if (inputCharLength > MAX_HASHTAGS_LENGTH) {
+    textHashtagsInput.setCustomValidity(`Удалите лишние ${inputCharLength - MAX_HASHTAGS_LENGTH} символов`);
+  } else if (isInputValid) {
     textHashtagsInput.setCustomValidity(``);
   }
   textHashtagsInput.reportValidity(``);
 };
 
+const getTextValidation = () => {
+  let inputValue = textDescriptionInput.value;
+  let inputCharLength = inputValue.length;
+
+  if (inputCharLength > MAX_DESCRIPTION_CHARS) {
+    textDescriptionInput.setCustomValidity(`Не больше 128 символов, удалите лишние ${inputCharLength - MAX_DESCRIPTION_CHARS}`);
+  } else {
+    textDescriptionInput.setCustomValidity(``);
+  }
+  textDescriptionInput.reportValidity(``);
+};
+
 
 textHashtagsInput.addEventListener(`input`, function () {
-  getValidation();
+  getHashValidation();
+});
+
+textDescriptionInput.addEventListener(`input`, function () {
+  getTextValidation();
 });

@@ -19,6 +19,8 @@ const scaleIndicator = document.querySelector(`.scale__control--value`);
 const effects = document.querySelector(`.effects__list`);
 const imgEffectLevel = document.querySelector(`.img-upload__effect-level`);
 const effectLevelValue = document.querySelector(`.effect-level__value`);
+const textHashtagsInput = document.querySelector(`.text__hashtags`);
+const textDescriptionInput = document.querySelector('.text__description');
 
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
@@ -112,7 +114,9 @@ imgOverlayClose.addEventListener(`click`, () => {
 });
 
 window.addEventListener(`keydown`, (evt) => {
-  if (evt.key === `Escape`) {
+  if (textDescriptionInput === document.activeElement) {
+    return evt;
+  } else if (evt.key === `Escape`) {
     evt.preventDefault();
     doCloseModal();
   }
@@ -192,9 +196,6 @@ effects.addEventListener(`mousedown`, removeEffects, true);
 effects.addEventListener(`change`, setEffect);
 
 /* Валидация */
-
-const textHashtagsInput = document.querySelector(`.text__hashtags`);
-const textDescriptionInput = document.querySelector('.text__description');
 
 const getHashValidation = () => {
   const reg = /^#[a-z\d]+$/;

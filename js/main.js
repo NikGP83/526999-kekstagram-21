@@ -5,7 +5,8 @@ const INITIAL_SCALE_FACTOR = `100`;
 const MAX_HASHTAGS_LENGTH = 20;
 const MAX_FOBOS = 3;
 const MAX_BRIGHTNESS = 3;
-const MAX_DESCRIPTION_CHARS = 128;
+const MAX_DESCRIPTION_CHARS = 140;
+
 
 const usersImg = document.querySelector(`.pictures`);
 const template = document.querySelector(`#picture`).content.querySelector(`.picture`);
@@ -21,6 +22,7 @@ const imgEffectLevel = document.querySelector(`.img-upload__effect-level`);
 const effectLevelValue = document.querySelector(`.effect-level__value`);
 const textHashtagsInput = document.querySelector(`.text__hashtags`);
 const textDescriptionInput = document.querySelector('.text__description');
+const regExTagCandidate = /^#[a-z\d]+$/g;
 
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
@@ -197,29 +199,52 @@ effects.addEventListener(`change`, setEffect);
 
 /* Валидация */
 
-const getHashValidation = () => {
-  const reg = /^#[a-z\d]+$/;
-  let inputValue = textHashtagsInput.value;
-  let inputCharLength = inputValue.length;
-  const isInputValid = reg.test(inputValue);
+const validateHashtag = () => {
+  // const reg = /^#[a-z\d]+$/;
+  textHashtagsInput.setCustomValidity(``);
+  const inputValue = textHashtagsInput.value.trim();
 
-
-  if (inputCharLength === 1 && inputValue[0] !== `#`) {
-    textHashtagsInput.setCustomValidity(`Должен начинаться с #`);
-  } else if (inputCharLength > MAX_HASHTAGS_LENGTH) {
-    textHashtagsInput.setCustomValidity(`Удалите лишние ${inputCharLength - MAX_HASHTAGS_LENGTH} символов`);
-  } else if (isInputValid) {
-    textHashtagsInput.setCustomValidity(``);
+  if (inputValue.length === 0) {
+    // textHashtagsInput.reportValidity();
+    return;
   }
-  textHashtagsInput.reportValidity(``);
+  // хэш-теги разделяются пробелами;
+
+  const arr = inputValue.split(` `);
+  const messageOne = validateHashtagCount(arr);
+  if (messageOne > 0) {
+    textHashtagsInput.setCustomValidity(messageOne);
+    textHashtagsInput.reportValidity();
+    return;
+  }
+  const hashtagCollector = new Set();
+
+  for (const hashtag of arr) {
+    // хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом;
+    const lowCs = hashtag.toLowerCase();
+    if (hashtagCollector.has(lowCs)) {
+      textHashtagsInput.setCustomValidity(`не допускается повторение хэштега ${hashtag}`);
+      textHashtagsInput.reportValidity();
+      return;
+    }
+    hashtagCollector.add(lowCs);
+    for (const validator of hashtagValidationRequarements) {
+      const message = validator(hashtag);
+      if (message.length > 0) {
+        textHashtagsInput.setCustomValidity(message);
+        textHashtagsInput.reportValidity();
+        return;
+      }
+    }
+  }
 };
 
-const getTextValidation = () => {
+const validateDescription = () => {
   let inputValue = textDescriptionInput.value;
   let inputCharLength = inputValue.length;
 
   if (inputCharLength > MAX_DESCRIPTION_CHARS) {
-    textDescriptionInput.setCustomValidity(`Не больше 128 символов, удалите лишние ${inputCharLength - MAX_DESCRIPTION_CHARS}`);
+    textDescriptionInput.setCustomValidity(`Не больше ${MAX_DESCRIPTION_CHARS} символов, удалите лишние ${inputCharLength - MAX_DESCRIPTION_CHARS}`);
   } else {
     textDescriptionInput.setCustomValidity(``);
   }
@@ -227,10 +252,44 @@ const getTextValidation = () => {
 };
 
 
-textHashtagsInput.addEventListener(`input`, function () {
-  getHashValidation();
-});
+textHashtagsInput.addEventListener(`input`, validateHashtag);
 
-textDescriptionInput.addEventListener(`input`, function () {
-  getTextValidation();
-});
+
+textDescriptionInput.addEventListener(`input`, validateDescription);
+
+const validateHashtagCount = (arr) => arr.length < 5 ? `` : (`нельзя больше пяти хэштегов, найдено ${arr.length} `);
+
+const hashtagValidationRequarements = [
+  // строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;
+  (hashtag) => {
+    if (!regExTagCandidate.test(hashtag)) {
+      return `строка после решётки должна состоять из букв и чисел`;
+    } else {
+      return ``;
+    }
+  },
+  // максимальная длина одного хэш-тега 20 символов, включая решётку;
+  (singleHashtag) => {
+    if (singleHashtag.length < MAX_HASHTAGS_LENGTH) {
+      return ``;
+    } else {
+      return `не более ${MAX_HASHTAGS_LENGTH} символов, найдено ${singleHashtag} - ${singleHashtag.length}`;
+    }
+  },
+  // хеш-тег не может состоять только из одной решётки;
+  (hashtag) => {
+    if (hashtag.length > 1) {
+      return ``;
+    } else {
+      return `не может состоять только из одной решётки`;
+    }
+  },
+  // хэш-тег начинается с символа # (решётка);
+  (hashtag) => {
+    if (hashtag[0] !== `#`) {
+      return `хэш-тег начинается с символа #`;
+    } else {
+      return ``;
+    }
+  },
+];

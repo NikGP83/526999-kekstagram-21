@@ -293,9 +293,7 @@ const hashtagValidationRequarements = [
     }
   },
 ];
+let blaBla = `blabla`;
+const myFuncFor = (hey) => `ololo`;
+console.log(myFuncFor(blaBla));
 
-const testFunc = () => `Hello world 1`;
-testFunc();
-
-const testFunc2 = () => `Hello world 2`;
-testFunc2();

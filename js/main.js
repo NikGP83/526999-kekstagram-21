@@ -294,4 +294,5 @@ const hashtagValidationRequarements = [
   },
 ];
 
-// временно для пуша
+const testFunc = () => `Hello world`; // временно для пуша
+testFunc();

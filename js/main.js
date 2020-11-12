@@ -24,6 +24,8 @@ const textHashtagsInput = document.querySelector(`.text__hashtags`);
 const textDescriptionInput = document.querySelector(`.text__description`);
 const regExTagCandidate = /^#[a-z\d]+$/g;
 
+
+
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
 const messages = [`Всё отлично!`,
@@ -34,7 +36,6 @@ const messages = [`Всё отлично!`,
   `Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!`
 ];
 
-const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const getAvatar = () => `img/avatar-${getRandom(0, 6)}.svg`;
 const getName = () => userNames[getRandom(0, userNames.length - 1)];
 const getComments = (imgIndx) => {
@@ -48,6 +49,11 @@ const getComments = (imgIndx) => {
   }
   return temp;
 };
+
+const usersImg = document.querySelector('.pictures');
+const template = document.querySelector('#picture').content.querySelector('.picture');
+
+const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const getProfiles = () => {
   const temp = [];
@@ -69,9 +75,9 @@ const getProfileInf = (profileParam) => {
 
   let profileElement = template.cloneNode(true);
 
-  profileElement.querySelector(`.picture__img`).src = profileParam.url;
-  profileElement.querySelector(`.picture__comments`).textContent = profileParam.comments.length;
-  profileElement.querySelector(`.picture__likes`).textContent = profileParam.likes;
+  profileElement.querySelector('.picture__img').src = profileParam.url;
+  profileElement.querySelector('.picture__comments').textContent = profileParam.comments.length;
+  profileElement.querySelector('.picture__likes').textContent = profileParam.likes;
 
   return profileElement;
 
@@ -89,6 +95,7 @@ const render = () => {
 };
 
 render();
+
 
 /* задание 4.1 */
 

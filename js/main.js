@@ -49,11 +49,6 @@ const getComments = (imgIndx) => {
   return temp;
 };
 
-const usersImg = document.querySelector('.pictures');
-const template = document.querySelector('#picture').content.querySelector('.picture');
-
-const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
 const getProfiles = () => {
   const temp = [];
   for (let i = 0; i < profilesNum; i++) {

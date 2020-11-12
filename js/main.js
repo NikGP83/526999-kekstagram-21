@@ -21,7 +21,7 @@ const effects = document.querySelector(`.effects__list`);
 const imgEffectLevel = document.querySelector(`.img-upload__effect-level`);
 const effectLevelValue = document.querySelector(`.effect-level__value`);
 const textHashtagsInput = document.querySelector(`.text__hashtags`);
-const textDescriptionInput = document.querySelector('.text__description');
+const textDescriptionInput = document.querySelector(`.text__description`);
 const regExTagCandidate = /^#[a-z\d]+$/g;
 
 const profilesNum = 25;
@@ -122,6 +122,7 @@ window.addEventListener(`keydown`, (evt) => {
     evt.preventDefault();
     doCloseModal();
   }
+  return evt;
 });
 
 const getCount = () => {
@@ -129,7 +130,7 @@ const getCount = () => {
   const prc = text.substring(0, text.length - 1);
   const num = Number(prc);
   return num === Number.NaN ? INITIAL_SCALE_FACTOR : num;
-}
+};
 
 const scaleUp = () => {
   let count = getCount();
@@ -150,7 +151,7 @@ const scaleDown = () => {
 const doScale = (value) => {
   scaleIndicator.value = `${value}%`;
   imgPrevew.style.transform = `scale(${value / MAX_PERCENT}`;
-}
+};
 
 
 scaleBtnBigger.addEventListener(`click`, () => {
@@ -293,7 +294,3 @@ const hashtagValidationRequarements = [
     }
   },
 ];
-let blaBla = `blabla`;
-const myFuncFor = (hey) => `ololo`;
-console.log(myFuncFor(blaBla));
-

@@ -118,6 +118,8 @@ imgOverlayClose.addEventListener(`click`, () => {
 window.addEventListener(`keydown`, (evt) => {
   if (textDescriptionInput === document.activeElement) {
     return evt;
+  } else if (textHashtagsInput === document.activeElement) {
+    return evt;
   } else if (evt.key === `Escape`) {
     evt.preventDefault();
     doCloseModal();
@@ -201,12 +203,11 @@ effects.addEventListener(`change`, setEffect);
 /* Валидация */
 
 const validateHashtag = () => {
-  // const reg = /^#[a-z\d]+$/;
+
   textHashtagsInput.setCustomValidity(``);
   const inputValue = textHashtagsInput.value.trim();
 
   if (inputValue.length === 0) {
-    // textHashtagsInput.reportValidity();
     return;
   }
   // хэш-теги разделяются пробелами;

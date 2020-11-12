@@ -24,8 +24,6 @@ const textHashtagsInput = document.querySelector(`.text__hashtags`);
 const textDescriptionInput = document.querySelector(`.text__description`);
 const regExTagCandidate = /^#[a-z\d]+$/g;
 
-
-
 const profilesNum = 25;
 const userNames = [`Вася`, `Лена`, `Слава`, `Толя`, `Оля`, `Катя`];
 const messages = [`Всё отлично!`,
@@ -50,9 +48,6 @@ const getComments = (imgIndx) => {
   return temp;
 };
 
-const usersImg = document.querySelector('.pictures');
-const template = document.querySelector('#picture').content.querySelector('.picture');
-
 const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const getProfiles = () => {
@@ -75,9 +70,9 @@ const getProfileInf = (profileParam) => {
 
   let profileElement = template.cloneNode(true);
 
-  profileElement.querySelector('.picture__img').src = profileParam.url;
-  profileElement.querySelector('.picture__comments').textContent = profileParam.comments.length;
-  profileElement.querySelector('.picture__likes').textContent = profileParam.likes;
+  profileElement.querySelector(`.picture__img`).src = profileParam.url;
+  profileElement.querySelector(`.picture__comments`).textContent = profileParam.comments.length;
+  profileElement.querySelector(`.picture__likes`).textContent = profileParam.likes;
 
   return profileElement;
 

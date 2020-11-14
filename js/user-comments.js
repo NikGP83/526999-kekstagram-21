@@ -24,5 +24,5 @@
 
   window.userComments = {
     getComments: getComments
-  }
+  };
 })();

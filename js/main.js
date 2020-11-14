@@ -26,6 +26,7 @@ const regExTagCandidate = /^#[a-z\d]+$/g;
 
 const profilesNum = 25;
 
+
 const profiles = window.profilesData.getProfiles();
 
 const getProfileInf = (profileParam) => {

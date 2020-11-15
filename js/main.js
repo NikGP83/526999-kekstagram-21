@@ -1,7 +1,7 @@
 'use strict';
 
 const MAX_PERCENT = 100;
-const INITIAL_SCALE_FACTOR = `100`;
+const INITIAL_SCALE_FACTOR = `100`; // ?
 const MAX_HASHTAGS_LENGTH = 20;
 const MAX_FOBOS = 3;
 const MAX_BRIGHTNESS = 3;
@@ -11,7 +11,6 @@ const MAX_DESCRIPTION_CHARS = 140;
 const usersImg = document.querySelector(`.pictures`);
 const template = document.querySelector(`#picture`).content.querySelector(`.picture`);
 const uploadFile = document.querySelector(`#upload-file`);
-const uploadOverlay = document.querySelector(`.img-upload__overlay`);
 const imgPrevew = document.querySelector(`.img-upload__preview`);
 const imgOverlayClose = document.querySelector(`#upload-cancel`);
 const scaleBtnSmaller = document.querySelector(`.scale__control--smaller`);
@@ -22,6 +21,7 @@ const imgEffectLevel = document.querySelector(`.img-upload__effect-level`);
 const effectLevelValue = document.querySelector(`.effect-level__value`);
 const textHashtagsInput = document.querySelector(`.text__hashtags`);
 const textDescriptionInput = document.querySelector(`.text__description`);
+const uploadOverlay = document.querySelector(`.img-upload__overlay`);
 const regExTagCandidate = /^#[a-z\d]+$/g;
 
 const profilesNum = 25;
@@ -57,14 +57,6 @@ render();
 
 /* задание 4.1 */
 
-const doOpenModal = () => {
-  uploadOverlay.classList.remove(`hidden`);
-  document.querySelector(`body`).classList.add(`modal-open`);
-  const defaultValue = effects.querySelector(`input[value = none]`);
-  defaultValue.click();
-  doScale(INITIAL_SCALE_FACTOR);
-  imgEffectLevel.style.display = `none`;
-};
 
 const doCloseModal = () => {
   uploadOverlay.classList.add(`hidden`);
@@ -73,7 +65,7 @@ const doCloseModal = () => {
 };
 
 uploadFile.addEventListener(`change`, () => {
-  doOpenModal();
+  window.openModal.doOpenModal();
 });
 
 imgOverlayClose.addEventListener(`click`, () => {
@@ -92,28 +84,6 @@ window.addEventListener(`keydown`, (evt) => {
   return evt;
 });
 
-const getCount = () => {
-  const text = scaleIndicator.value;
-  const prc = text.substring(0, text.length - 1);
-  const num = Number(prc);
-  return num === Number.NaN ? INITIAL_SCALE_FACTOR : num;
-};
-
-const scaleUp = () => {
-  let count = getCount();
-  if (count < 100) {
-    (count += 25);
-  }
-  return count;
-};
-
-const scaleDown = () => {
-  let count = getCount();
-  if (count > 25) {
-    (count -= 25);
-  }
-  return count;
-};
 
 const doScale = (value) => {
   scaleIndicator.value = `${value}%`;
@@ -122,12 +92,12 @@ const doScale = (value) => {
 
 
 scaleBtnBigger.addEventListener(`click`, () => {
-  doScale(scaleUp());
+  doScale(window.scaleUp());
 });
 
 
 scaleBtnSmaller.addEventListener(`click`, () => {
-  doScale(scaleDown());
+  doScale(window.scaleDown());
 });
 
 const imgBigPic = document.querySelector(`.img-upload__preview`);

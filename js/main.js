@@ -1,7 +1,6 @@
 'use strict';
 
-const MAX_PERCENT = 100;
-const INITIAL_SCALE_FACTOR = `100`; // ?
+
 const MAX_HASHTAGS_LENGTH = 20;
 const MAX_FOBOS = 3;
 const MAX_BRIGHTNESS = 3;
@@ -13,9 +12,6 @@ const template = document.querySelector(`#picture`).content.querySelector(`.pict
 const uploadFile = document.querySelector(`#upload-file`);
 const imgPrevew = document.querySelector(`.img-upload__preview`);
 const imgOverlayClose = document.querySelector(`#upload-cancel`);
-const scaleBtnSmaller = document.querySelector(`.scale__control--smaller`);
-const scaleBtnBigger = document.querySelector(`.scale__control--bigger`);
-const scaleIndicator = document.querySelector(`.scale__control--value`);
 const effects = document.querySelector(`.effects__list`);
 const imgEffectLevel = document.querySelector(`.img-upload__effect-level`);
 const effectLevelValue = document.querySelector(`.effect-level__value`);
@@ -72,33 +68,20 @@ imgOverlayClose.addEventListener(`click`, () => {
   doCloseModal();
 });
 
-window.addEventListener(`keydown`, (evt) => {
-  if (textDescriptionInput === document.activeElement) {
-    return evt;
-  } else if (textHashtagsInput === document.activeElement) {
-    return evt;
-  } else if (evt.key === `Escape`) {
-    evt.preventDefault();
-    doCloseModal();
-  }
-  return evt;
-});
+// window.addEventListener(`keydown`, (evt) => {
+//   if (textDescriptionInput === document.activeElement) {
+//     return evt;
+//   } else if (textHashtagsInput === document.activeElement) {
+//     return evt;
+//   } else if (evt.key === `Escape`) {
+//     evt.preventDefault();
+//     doCloseModal();
+//   }
+//   return evt;
+// });
 
 
-const doScale = (value) => {
-  scaleIndicator.value = `${value}%`;
-  imgPrevew.style.transform = `scale(${value / MAX_PERCENT}`;
-};
 
-
-scaleBtnBigger.addEventListener(`click`, () => {
-  doScale(window.scaleUp());
-});
-
-
-scaleBtnSmaller.addEventListener(`click`, () => {
-  doScale(window.scaleDown());
-});
 
 const imgBigPic = document.querySelector(`.img-upload__preview`);
 

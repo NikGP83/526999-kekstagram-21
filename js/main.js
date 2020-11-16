@@ -1,6 +1,6 @@
 'use strict';
 
-
+const MAX_PERCENT = 100;
 const MAX_HASHTAGS_LENGTH = 20;
 const MAX_FOBOS = 3;
 const MAX_BRIGHTNESS = 3;
@@ -47,8 +47,12 @@ const render = () => {
 
   usersImg.appendChild(fragment);
 };
-
+const listener = (value) => {
+  imgPrevew.style.transform = `scale(${value / MAX_PERCENT}`;
+}
+window.counter.registerScaleListener(listener);
 render();
+
 
 
 /* задание 4.1 */

@@ -1,12 +1,16 @@
 'use strict';
 
 (() => {
-  const MAX_PERCENT = 100;
   const scaleIndicator = document.querySelector(`.scale__control--value`);
   const scaleBtnSmaller = document.querySelector(`.scale__control--smaller`);
   const scaleBtnBigger = document.querySelector(`.scale__control--bigger`);
-  const imgPrevew = document.querySelector(`.img-upload__preview`);
+  // const imgPrevew = document.querySelector(`.img-upload__preview`);
+  let newScaleListener = undefined;
   const INITIAL_SCALE_FACTOR = `100`;
+
+  const registerScaleListener = (listener) => {
+    newScaleListener = listener;
+  };
 
   const getCount = () => {
     const text = scaleIndicator.value;
@@ -33,24 +37,22 @@
 
   const doScale = (value) => {
     scaleIndicator.value = `${value}%`;
-    imgPrevew.style.transform = `scale(${value / MAX_PERCENT}`;
+    if (typeof (newScaleListener) !== `undefined`) {
+      newScaleListener(value);
+    }
   };
 
 
   scaleBtnBigger.addEventListener(`click`, () => {
-    doScale(window.scaleUp());
+    doScale(scaleUp());
   });
 
 
   scaleBtnSmaller.addEventListener(`click`, () => {
-    doScale(window.scaleDown());
+    doScale(scaleDown());
   });
 
   window.counter = {
-    getCount,
-    scaleUp,
-    scaleDown
+    registerScaleListener
   };
-
-  ;
 })();
